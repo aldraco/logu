@@ -1,21 +1,23 @@
-import config
+import abc
+import sockets
 
-class Uploader(object):
-  """Takes cues from config file and attaches the right bits to do the job."""
+class UploaderBase(object):
 
-  def __init__(self, uploader_name, **kwargs):
-    loader_config = config.make_config(uploader_name=uploader_name, options=kwargs)
-    
-    self._sock = loader_config['socket']
-    self._validate = loader_config['validator']
+  __metaclass__ = abc.ABCMeta
+
+  @abc.abstractmethod
+  def send(self):
+    pass
 
 
-  def upload(self, data):
-    validated = self._validate(data)
-    if validated:
-      prepared = self._prepare(validated)
-      self._send_data(prepared)
+class GraphiteUploader(UploaderBase):
 
-  def _send_data(self, prepared_data):
-    """Use the unique socket to send the data"""
-    self._sock.send(prepared_data)
+  def __init__(self, host="localhost", port=2004, maxsize=512):
+    self._host = host
+    self._port = port
+    self._maxsize = maxsize
+    self._sock = sockets.UDPSocket(host=self._host, port=self._port, maxsize=self._maxsize)
+
+  def send(self, data):
+    self._sock.send(data)
+    self._sock.close()

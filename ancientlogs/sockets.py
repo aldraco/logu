@@ -18,7 +18,6 @@ class UDPSocket(SocketBase):
   """basic UDP socket to send and forget"""
 
   def __init__(self, host="localhost", port=None, maxsize=512):
-    print "Making another instance"
     self._sock = socket.socket()
     self._host = host
     self._port = port
@@ -29,12 +28,22 @@ class UDPSocket(SocketBase):
     self._connected = True
 
   def _close_connection(self):
-    # TODO shutdown
+    self._sock.shutdown(socket.SHUT_RDWR)
     self._sock.close()
 
+  def _prepare(self, data):
+    payload = pickle.dumps(data, protocol=2)
+    header = struct.pack("!L", len(payload))
+    message = header + payload
+    return message
+
   def send(self, data):
-    if self._connected:
-      self._sock.sendall(data)
-      self._close_connection()
+    if not self._connected:
+      self._connect()
+    data = self._prepare(data)
+    self._sock.send(data)
+
+  def close(self):
+    self._close_connection()
 
 

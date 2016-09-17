@@ -4,38 +4,49 @@ import struct
 import abc
 
 class SocketBase(object):
-  """Abstract base class for various kinds of socket connections"""
-  
   __metaclass__ = abc.ABCMeta
+
+  def __init__(self, host="localhost", port=9000):
+    self._host = host
+    self._port = port
+    self._connected = False
+    self._maxsize = 512
+
 
   @abc.abstractmethod
   def send(self):
     pass
 
 
+  def update_max_size(self, newSize):
+    self._maxsize = newSize
+
+
+  def use_port(self, new_port):
+    if self._connected:
+      self._close_connection()
+    self._port = new_port
+
+
+
 
 class UDPSocket(SocketBase):
-  """basic UDP socket to send and forget"""
+  def __init__(self, host="localhost", port=9000):
+    super(UDPSocket, self).__init__(host=host, port=port)
+    # set up socket
 
-  def __init__(self, host="localhost", port=None, maxsize=512):
+
+  def send(self):
+    pass
+
+
+
+
+class TCPSocket(SocketBase):
+  def __init__(self, host="localhost", port=9000):
+    super(TCPSocket, self).__init__(host=host, port=port)
     self._sock = socket.socket()
-    self._host = host
-    self._port = port
-    self._connected = False
-
-  def _connect(self):
-    self._sock.connect((self._host, self._port))
-    self._connected = True
-
-  def _close_connection(self):
-    self._sock.shutdown(socket.SHUT_RDWR)
-    self._sock.close()
-
-  def _prepare(self, data):
-    payload = pickle.dumps(data, protocol=2)
-    header = struct.pack("!L", len(payload))
-    message = header + payload
-    return message
+    
 
   def send(self, data):
     if not self._connected:
@@ -43,7 +54,25 @@ class UDPSocket(SocketBase):
     data = self._prepare(data)
     self._sock.send(data)
 
+
   def close(self):
-    self._close_connection()
+    if self._connected:
+      self._close_connection()
 
 
+  def _connect(self):
+    self._sock.connect((self._host, self._port))
+    self._connected = True
+
+
+  def _close_connection(self):
+    self._sock.shutdown(socket.SHUT_RDWR)
+    self._sock.close()
+    self._connected = False
+
+
+  def _prepare(self, data):
+    payload = pickle.dumps(data, protocol=2)
+    header = struct.pack("!L", len(payload))
+    message = header + payload
+    return message

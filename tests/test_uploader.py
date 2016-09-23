@@ -20,9 +20,6 @@ class TestDefaultUploaderCreation(unittest.TestCase):
         # on the kind of implementation being used
         pass
 
-    def test_default_protocol_is_pickle(self):
-        self.assertEqual(self.default_uploader._protocol, "pickle",
-            msg="Implement: default protocol is Pickle")
 
 class TestParameterizedUploaderCreation(unittest.TestCase):
     def setUp(self):
@@ -45,9 +42,9 @@ class TestDefaultUploaderAPIFunctions(unittest.TestCase):
             msg="should correctly create a socket with a port number")
 
     def test_use_plaintext_protocol(self):
-        self.default_uploader.use_plaintext_protocol()
-        self.assertEqual(self.default_uploader._protocol, "plaintext",
-            msg="Should change the protocol to plaintext")
+        # should change the validator
+        # should change the port
+        pass
 
 class TestParameterizedUploaderAPIFunctions(unittest.TestCase):
     def setUp(self):

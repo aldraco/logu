@@ -30,7 +30,6 @@ class SocketBase(object):
 class UDPSocket(SocketBase):
   def __init__(self, host="localhost", port=9000):
     super(UDPSocket, self).__init__(host=host, port=port)
-    # set up socket
 
   def send(self):
     pass
@@ -56,11 +55,13 @@ class TCPSocket(SocketBase):
   def _connect(self):
     self._sock.connect((self._host, self._port))
     self._connected = True
+    print "Connected to {}:{}".format(self._host, self._port)
 
   def _close_connection(self):
     self._sock.shutdown(socket.SHUT_RDWR)
     self._sock.close()
     self._connected = False
+    print "Connection to {}:{} closed.".format(self._host, self._port)
 
   def _prepare(self, data):
     payload = pickle.dumps(data, protocol=2)

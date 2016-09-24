@@ -17,8 +17,20 @@ class UploaderBase(object):
   def validate_data(self, data):
     pass
 
+  @abc.abstractmethod
+  def _cleanup(self):
+    pass
+
   def use_port(self, value):
       self.socket.use_port(value)
+
+  def __enter__(self):
+    return self
+
+
+  def __exit__(self, exc_type, exc_val, exc_tb):
+    self._cleanup()
+    pass
 
 
 
@@ -30,9 +42,8 @@ class GraphiteUploader(UploaderBase):
     self._validate = validate_pickle_protocol
 
   def send(self, data):
-    data = self.validate_data(self, data)
+    data = self.validate_data(data)
     self.socket.send(data)
-    self.socket.close()
 
   def validate_data(self, data):
     data = self._validate(data)
@@ -46,3 +57,7 @@ class GraphiteUploader(UploaderBase):
     self._validate = validate_plaintext_protocol
     self.use_port(2003)
     # should also change to default port or allow user to say port
+
+  def _cleanup(self):
+    self.socket.close()
+    pass

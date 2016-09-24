@@ -1,0 +1,1 @@
+class DataFormattingError(AssertionError): pass

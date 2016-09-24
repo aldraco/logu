@@ -1,8 +1,4 @@
-import datetime as dt
-import itertools
-
-import ancientlogs
-import ancientlogs.sockets as als
+import logu.sockets as als
 
 import unittest
 import socket

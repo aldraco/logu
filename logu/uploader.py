@@ -40,11 +40,8 @@ class GraphiteUploader(UploaderBase):
             data = self._validate(data)
         except DataFormattingError as e:
             print e
-            print "error"
         else:
-            print "No error, sending data"
             self.socket.send(data)
-
 
     def use_UDP_socket(self):
         self.socket.close()

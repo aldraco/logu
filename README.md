@@ -1,4 +1,4 @@
-# Graphite Batch Upload
+# Logu: easy batch upload for logs
 
 This project aims to be a simple adapter for batch uploads from data/log processing scripts into common graphing software.
 
@@ -10,19 +10,14 @@ This project aims to be an abstraction of that process for Graphite, and facilit
 ## How to Use
 
 ~~~~~
-import ancientlogs
+from logu import GraphiteUploader
 
-loader = ancientlogs.GraphiteUploader()
-loader.send(data)
+with GraphiteUploader() as gu:
+    gu.send(data)
+
 # data is a list of tuples, see docs for formatting
 ~~~~~
 
+The uploader will verify your data for you, clean up sockets when done (if used as a context manager), and help you organize your logs.
 
-See docs for more details on correct format for data. I plan to add some helpful formatting utilities to aid this process.
-
-The batch uploader is meant to abstract all of the processes of dealing with large batches of historical data, such as 
-
- - dealing with max size limits
- - setting up and tearing down sockets
- - conveniently naming sets of data with the same stat name.
 

@@ -1,13 +1,10 @@
-import datetime as dt
-import itertools
-
-import ancientlogs
-import ancientlogs.sockets as sockets
+import logu
+import logu.sockets as sockets
 import unittest
 
 class TestDefaultUploaderCreation(unittest.TestCase):
     def setUp(self):
-        self.default_uploader = ancientlogs.GraphiteUploader()
+        self.default_uploader = logu.GraphiteUploader()
 
     def tearDown(self):
         pass
@@ -23,7 +20,7 @@ class TestDefaultUploaderCreation(unittest.TestCase):
 
 class TestParameterizedUploaderCreation(unittest.TestCase):
     def setUp(self):
-        self.parameterized_uploader = ancientlogs.GraphiteUploader(host='localhost', port=8080)
+        self.parameterized_uploader = logu.GraphiteUploader(host='localhost', port=8080)
 
     def tearDown(self):
         pass
@@ -31,7 +28,7 @@ class TestParameterizedUploaderCreation(unittest.TestCase):
 
 class TestDefaultUploaderAPIFunctions(unittest.TestCase):
     def setUp(self):
-        self.default_uploader = ancientlogs.GraphiteUploader()
+        self.default_uploader = logu.GraphiteUploader()
 
     def test_use_UDP_socket(self):
         u = self.default_uploader
@@ -48,7 +45,7 @@ class TestDefaultUploaderAPIFunctions(unittest.TestCase):
 
 class TestParameterizedUploaderAPIFunctions(unittest.TestCase):
     def setUp(self):
-        self.parameterized_uploader = ancientlogs.GraphiteUploader(host='localhost', port=8080)
+        self.parameterized_uploader = logu.GraphiteUploader(host='localhost', port=8080)
 
     def tearDown(self):
         pass

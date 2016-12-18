@@ -18,10 +18,16 @@ This project aims to be an abstraction of that process for Graphite, and facilit
 ~~~~~
 from logu import GraphiteUploader
 
-with GraphiteUploader() as gu:
+with GraphiteUploader(host="graphite.yourhost.com") as gu:
     gu.send(data)
 
 # data is a list of tuples, see docs for formatting
+
+# to change the port number:
+with GraphiteUploader(host="graphite.yourhost.com") as gu:
+    gu.use_port(2004)
+    gu.send(data)
+
 ~~~~~
 
 The uploader will verify your data for you, clean up sockets when done (if used as a context manager), and help you organize your logs.

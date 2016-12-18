@@ -17,13 +17,7 @@ class TestTCPSocket(unittest.TestCase):
         s = self.default_TCP_socket
         self.assertEqual(s._host, 'localhost')
         self.assertEqual(s._port, 9000) 
-        self.assertEqual(s._maxsize, 512)
         self.assertEqual(s._connected, False)
-
-    def test_update_max_size(self):
-        s = self.default_TCP_socket
-        s.update_max_size(1024)
-        self.assertEqual(s._maxsize, 1024)
 
     def test_use_port(self):
         s = self.default_TCP_socket

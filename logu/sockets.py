@@ -4,36 +4,28 @@ import struct
 import abc
 
 class SocketBase(object):
+  """
+  Using a metaclass to leave room for a UDP socket at a later date.
+  """
   __metaclass__ = abc.ABCMeta
 
   def __init__(self, host="localhost", port=9000):
     self._host = host
     self._port = port
     self._connected = False
-    self._maxsize = 512
 
   @abc.abstractmethod
   def send(self):
     pass
 
-  def update_max_size(self, newSize):
-    self._maxsize = newSize
+  @abc.abstractmethod
+  def close(self):
+    pass
 
   def use_port(self, new_port):
     if self._connected:
       self._close_connection()
     self._port = new_port
-
-
-
-
-class UDPSocket(SocketBase):
-  def __init__(self, host="localhost", port=9000):
-    super(UDPSocket, self).__init__(host=host, port=port)
-
-  def send(self):
-    pass
-
 
 
 

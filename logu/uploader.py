@@ -1,6 +1,6 @@
 import abc
-from sockets import UDPSocket, TCPSocket
-from validators import validate_pickle_protocol, validate_plaintext_protocol
+from sockets import TCPSocket
+from validators import validate_pickle_protocol
 from errors import DataFormattingError
 
 class UploaderBase(object):
@@ -42,14 +42,6 @@ class GraphiteUploader(UploaderBase):
             print e
         else:
             self.socket.send(data)
-
-    def use_UDP_socket(self):
-        self.socket.close()
-        self.socket = UDPSocket(host=self.host, port=self.port)
-
-    def use_plaintext_protocol(self):
-        self._validate = validate_plaintext_protocol
-        self.use_port(2003)
 
     def _cleanup(self):
         self.socket.close()
